@@ -8,28 +8,27 @@ from selenium.webdriver.support import expected_conditions as EC
 class BasicOperation():
 	def composeWeibo(self,content):
 		#self.driver.find_element_by_id("index_title_compose").click()
-		#添加tag
-		self.driver.find_element_by_id("buttonTag").click()
-		self.driver.find_element_by_id("editText").send_keys("weico weibo")
-		#添加@
-		self.driver.find_element_by_id("buttonAt").click()
-		self.driver.find_element_by_id("search_edittext").send_keys("test")
-		self.driver.find_element_by_id("item_user_checked").click()
-		self.driver.find_element_by_id("done_button").click()
+
 		#添加文字
 		self.driver.find_element_by_id("compose_view_wrap").send_keys(content)
 		#添加位置
 		WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "textLocation")))
 		self.driver.find_element_by_id("textLocation").click()
 		WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "title")))
-		self.driver.find_element_by_id("title").click()
+		self.driver.find_element_by_id("title").click()	
+		#添加@
+		self.driver.find_element_by_id("buttonAt").click()
+		self.driver.find_element_by_id("search_edittext").send_keys("test")
+		self.driver.find_element_by_id("item_user_checked").click()
+		self.driver.find_element_by_id("done_button").click()
 		#拍摄照片
 		self.driver.find_element_by_id("buttonCam").click()
-		self.driver.find_element_by_xpath("//android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.GridView[1]/android.widget.RelativeLayout[1]/android.widget.LinearLayout[1]").click()
+		self.driver.find_element_by_id("cameraPreview").click()
 		time.sleep(2)
-		self.driver.find_element_by_id("content").click()
+		self.driver.find_element_by_id("com.android.camera2:id/shutter_button").click()
+		time.sleep(5)
+		self.driver.find_element_by_id("com.android.camera2:id/done_button").click()
 		time.sleep(2)
-		self.driver.find_element_by_xpath("//android.view.View[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.RelativeLayout[1]/android.widget.RelativeLayout[2]/android.widget.LinearLayout[1]/android.widget.ImageView[2]").click()
 		photo = range(2,9)#添加7张已有图片
 		for i in photo:
 			self.driver.find_element_by_xpath("//android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.GridView[1]/android.widget.RelativeLayout["+str(i)+"]/android.widget.ImageView[1]").click()
@@ -42,16 +41,20 @@ class BasicOperation():
 		try:
 			while expression>0:
 				i = random.randrange(1,22)
-				self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
+				self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]").click()
 				expression-=1
 			self.driver.find_element_by_id("newblog_expression_fontexpression").click()
 			while fontexpression>0:	
 				i = random.randrange(1,22)
-				self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
+				self.driver.find_element_by_xpath(" //android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]").click()
 				fontexpression -= 1
 		except:
 			time.sleep(5)
 			self.driver.find_element_by_id("newblog_expression_back").click()
+
+		# #添加tag
+		# self.driver.find_element_by_id("buttonTag").click()
+		# self.driver.find_element_by_id("editText").send_keys("weico")
 			
 
 	def composeComments(self,comments):
