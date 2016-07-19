@@ -46,7 +46,7 @@ class BasicOperation():
 			self.driver.find_element_by_id("newblog_expression_fontexpression").click()
 			while fontexpression>0:	
 				i = random.randrange(1,22)
-				self.driver.find_element_by_xpath(" //android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]").click()
+				self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]").click()
 				fontexpression -= 1
 		except:
 			time.sleep(5)
@@ -58,9 +58,12 @@ class BasicOperation():
 			
 
 	def composeComments(self,comments):
-		#添加tag
-		self.driver.find_element_by_id("buttonTag").click()
-		self.driver.find_element_by_id("editText").send_keys("weico comments")
+		#add pic
+		self.driver.find_element_by_id("buttonCam").click()
+		self.driver.find_element_by_id("albumPreview").click()
+		# #添加tag
+		# self.driver.find_element_by_id("buttonTag").click()
+		# self.driver.find_element_by_id("editText").send_keys("weico comments")
 		#添加@
 		self.driver.find_element_by_id("buttonAt").click()
 		self.driver.find_element_by_id("search_edittext").send_keys("test")
@@ -74,13 +77,13 @@ class BasicOperation():
 		expression = random.randint(1,10)
 		while expression>0:
 			i = random.randrange(1,22)
-			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
+			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]").click()
 			expression-=1
 		self.driver.find_element_by_id("newblog_expression_fontexpression").click()
 		fontexpression = random.randint(1,10)
 		while fontexpression>0:	
 			i = random.randrange(1,22)
-			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
+			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]").click()
 			fontexpression -= 1
 		#同时转发评论
 		forwardComments = random.randint(0,1)
@@ -96,12 +99,15 @@ class BasicOperation():
 		expression = random.randint(1,10)
 		while expression>0:
 			i = random.randrange(1,22)
-			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
+			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
 			expression -=1
 		self.driver.find_element_by_id("newblog_expression_fontexpression").click()
 		fontexpression = random.randint(1,10)
 		while fontexpression>0:
 			i = random.randrange(1,22)
-			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
+			self.driver.find_element_by_xpath("//android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.GridView[1]/android.widget.RelativeLayout[" +str(i)+ "]/android.widget.ImageView[1]").click()
 			fontexpression -= 1
 		self.driver.find_element_by_id("send_layout").click()
+
+
+
