@@ -14,11 +14,15 @@ class BasicOperation():
 		#添加位置
 		WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "textLocation")))
 		self.driver.find_element_by_id("textLocation").click()
-		WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "title")))
-		self.driver.find_element_by_id("title").click()	
+		try:
+			time.sleep(5)
+			self.driver.find_element_by_id("title").click()
+		except:
+			self.driver.find_element_by_id("delete_address").click()
 		#添加@
 		self.driver.find_element_by_id("buttonAt").click()
 		self.driver.find_element_by_id("search_edittext").send_keys("test")
+		time.sleep(2)
 		self.driver.find_element_by_id("item_user_checked").click()
 		self.driver.find_element_by_id("done_button").click()
 		#拍摄照片
@@ -67,6 +71,7 @@ class BasicOperation():
 		#添加@
 		self.driver.find_element_by_id("buttonAt").click()
 		self.driver.find_element_by_id("search_edittext").send_keys("test")
+		time.sleep(3)
 		self.driver.find_element_by_id("item_user_checked").click()
 		self.driver.find_element_by_id("done_button").click()
 		#添加文字
@@ -109,5 +114,27 @@ class BasicOperation():
 			fontexpression -= 1
 		self.driver.find_element_by_id("send_layout").click()
 
+	def getElementNum(self,prefix_xpath,postfix_xpath):
+		i = 1
+		while True:
+			xpath = prefix_xpath+str(i)+postfix_xpath
+			try:
+				self.driver.find_element_by_xpath(xpath)
+			except:
+				break
+			i+=1
+		return i-1
 
+	def isTwoStringSimilar(self,str1,str2):
+		s1 = str1.lower()
+		s2 = str2.lower()
+		inChar = 0
+		for i in range(0,len(s1)):
+			if s1[i] in s2:
+				inChar += 1
+		similarity = inChar/len(s1)
+		if similarity >= 0.5:
+			return True
+		else:
+			return False
 
