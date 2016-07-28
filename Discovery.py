@@ -46,7 +46,7 @@ class Notify(unittest.TestCase,BasicOperation):
 				except:
 					pass
 
-
+	# invalid case
 	# def test_010_search(self):
 	# 	self.driver.find_element_by_id("channel_head_search_layout").click()
 	# 	self.driver.find_element_by_id("act_search_input").send_keys("weico")

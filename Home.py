@@ -41,6 +41,10 @@ class Home(unittest.TestCase,BasicOperation):
 				break
 			except:
 				self.driver.back()
+				try:
+					self.driver.find_element_by_id("ed_btn_negative").click()
+				except:
+					pass
 
 	def test_01_sendWeibo(self):
 		self.driver.find_element_by_id("index_title_compose").click()
