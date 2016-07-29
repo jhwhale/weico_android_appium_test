@@ -7,8 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class BasicOperation():
 	def composeWeibo(self,content):
-		#self.driver.find_element_by_id("index_title_compose").click()
-
 		#添加文字
 		self.driver.find_element_by_id("compose_view_wrap").send_keys(content)
 		#添加位置
@@ -128,7 +126,7 @@ class BasicOperation():
 	def isTwoStringSimilar(self,str1,str2):
 		s1 = str1.lower()
 		s2 = str2.lower()
-		inChar = 0
+		inChar = 0.0
 		for i in range(0,len(s1)):
 			if s1[i] in s2:
 				inChar += 1
