@@ -126,13 +126,31 @@ class BasicOperation():
 	def isTwoStringSimilar(self,str1,str2):
 		s1 = str1.lower()
 		s2 = str2.lower()
+		#较短字符串中的字在较长字符串中出现的次数，除以较短字符串本身的长度
+		if len(s1)>len(s2):
+			temp = s1
+			s1 = s2
+			s2 = temp
 		inChar = 0.0
 		for i in range(0,len(s1)):
 			if s1[i] in s2:
 				inChar += 1
 		similarity = inChar/len(s1)
+		print similarity
 		if similarity >= 0.5:
 			return True
 		else:
 			return False
 
+	def backToHome(self):
+		while True:
+			try:
+				self.driver.find_element_by_id("tab_icons_home_img")
+				break
+			except:
+				self.driver.back()
+				try:
+					self.driver.find_element_by_id("ed_btn_negative").click()
+				except:
+					pass
+			

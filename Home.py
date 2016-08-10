@@ -46,6 +46,7 @@ class Home(unittest.TestCase,BasicOperation):
 				except:
 					pass
 
+
 	def test_01_sendWeibo(self):
 		self.driver.find_element_by_id("index_title_compose").click()
 		typeText = "test_01_composeWeibo"
@@ -60,7 +61,7 @@ class Home(unittest.TestCase,BasicOperation):
 		time.sleep(2)
 		self.driver.find_element_by_id("btn_next").click()
 		self.driver.find_element_by_id("send_ok").click()
-		time.sleep(5)
+		time.sleep(15)
 		self.driver.find_element_by_id("tab_icons_prof_layout").click()
 		time.sleep(1)
 		self.driver.find_element_by_id("tab_icons_prof_layout").click()
@@ -197,12 +198,15 @@ class Home(unittest.TestCase,BasicOperation):
 		self.assertEqual(weibo_content,favorite_weibo_content,"The weibo is not marked as favorite successfully.")
 
 	def test_06_likeFromTimeline(self):
-		while True:
+		for j in range(3):
 			try:
 				self.driver.find_element_by_id("index_item_actions").click()
 				break
 			except:
 				TouchAction(self.driver).press(x=500,y=1200).move_to(x=0,y=-200).wait(1000).release().perform()
+				time.sleep(3)
+			if j == 2:
+				self.skipTest("Cannot find action button.")
 		self.driver.find_element_by_id("index_item_praise").click()
 		#验证
 		self.driver.find_element_by_id("index_item_created_at").click()
@@ -498,6 +502,211 @@ class Home(unittest.TestCase,BasicOperation):
 		self.driver.find_element_by_id("night_setting_icon_bg_selector_button").click()
 		time.sleep(3)
 		self.driver.get_screenshot_as_file("./Screenshots/test_23_Night.png")
+
+	def test_020_draft_originalWeibo_cleanAll(self):#为防止草稿箱中残留的草稿对后续测试的干扰，先进行clean all
+		typeText = "test_023_draft_originalWeibo_cleanAll"
+		for i in [0,1]:
+			#create drafts
+			self.driver.find_element_by_id("index_title_compose").click()
+			self.composeWeibo(typeText+str(i))
+			self.driver.find_element_by_id("edit_cancel").click()
+			self.driver.find_element_by_id("ed_btn_positive").click()
+		#clean all drafts
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Drafts").click()
+		WebDriverWait(self.driver,10).until(EC.presence_of_element_located((By.ID,"draft_clean")))
+		self.driver.find_element_by_id("draft_clean").click()#clean all drafts
+		self.driver.find_element_by_id("ed_btn_positive").click()
+		try:
+			self.driver.find_element_by_id("draft_content")
+		except:
+			pass
+		else:
+			self.fail("Cannot clean all the drafts.")
+
+	def test_021_drafts_originalWeibo_edit(self):
+		typeText = " I have edited the draft."
+		#create drafts		
+		self.driver.find_element_by_id("index_title_compose").click()
+		self.composeWeibo("test_020_drafts_originalWeibo_edit")
+		self.driver.find_element_by_id("edit_cancel").click()
+		self.driver.find_element_by_id("ed_btn_positive").click()
+		#edit draft and send
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Drafts").click()
+		self.driver.find_element_by_id("draft_content").click()#select the first draft
+		self.driver.find_element_by_name("Edit").click()#edit
+		self.driver.find_element_by_id("compose_view_wrap").send_keys(typeText)
+		#添加照片
+		self.driver.find_element_by_id("buttonCam").click()
+		self.driver.find_element_by_id("cameraPreview").click()
+		time.sleep(2)
+		self.driver.find_element_by_id("com.android.camera2:id/shutter_button").click()
+		WebDriverWait(self.driver,10).until(EC.presence_of_element_located((By.ID,"com.android.camera2:id/done_button")))
+		self.driver.find_element_by_id("com.android.camera2:id/done_button").click()
+		time.sleep(2)
+		self.driver.find_element_by_id("btn_next").click()
+		self.driver.find_element_by_id("send_ok").click()
+		#验证
+		time.sleep(20)
+		self.backToHome()
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(1)
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(3)
+		content = self.driver.find_element_by_id("index_item_weibo_content").get_attribute("text")
+		self.assertIn(typeText,content)
+
+	def test_022_drafts_originalWeibo_repost(self):
+		typeText = "test_021_drafts_originalWeibo_repost"
+		#create drafts		
+		self.driver.find_element_by_id("index_title_compose").click()
+		self.composeWeibo(typeText)
+		self.driver.find_element_by_id("edit_cancel").click()
+		self.driver.find_element_by_id("ed_btn_positive").click()
+		#repost draft
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Drafts").click()
+		self.driver.find_element_by_id("draft_content").click()#select the first draft
+		self.driver.find_element_by_name("repost").click()
+		#验证
+		time.sleep(20)
+		self.backToHome()
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(1)
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(3)
+		content = self.driver.find_element_by_id("index_item_weibo_content").get_attribute("text")
+		self.assertIn(typeText,content)
+
+	def test_023_draft_originalWeibo_delete(self):
+		#create drafts		
+		self.driver.find_element_by_id("index_title_compose").click()
+		self.composeWeibo("test_022_draft_originalWeibo_delete")
+		self.driver.find_element_by_id("edit_cancel").click()
+		self.driver.find_element_by_id("ed_btn_positive").click()
+		#delete draft
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Drafts").click()
+		# WebDriverWait(self.driver,10).until(EC.presence_of_element_located((By.ID,"draft_del")))
+		content = self.driver.find_element_by_id("draft_content").get_attribute("text")
+		self.driver.find_element_by_id("draft_del").click()#delete the first draft
+		try:
+			allDrafts = self.driver.find_elements(by ='id',value = 'draft_content')
+			allText = []
+			for i in range(len(allDrafts)):
+				text = allDrafts[i].get_attribute("text")
+				allText.append(text)
+			self.assertNotIn(content,allText)
+		except:
+			pass
+
+
+	def test_024_drafts_repostedWeibo(self):
+		typeText = "I have edited the draft."		
+		WebDriverWait(self.driver,10).until(EC.invisibility_of_element_located((By.ID, "pull_to_refresh_text")))#fl_inner
+		while True:
+			try:
+				self.driver.find_element_by_id("index_item_actions").click()
+				break
+			except:
+				TouchAction(self.driver).press(x=500,y=800).move_to(x=0,y=-100).wait(1000).release().perform()
+				time.sleep(3)
+		self.driver.find_element_by_id("index_item_repost").click()
+		self.driver.find_element_by_id("editText").send_keys("Settings.test_024_drafts_repostedWeibo")
+		self.driver.find_element_by_id("edit_cancel").click()
+		time.sleep(1)
+		self.driver.find_element_by_id("ed_btn_positive").click()
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Drafts").click()
+		self.driver.find_element_by_id("draft_content").click()
+		self.driver.find_element_by_name("Edit").click()#edit
+		self.driver.find_element_by_id("compose_view_wrap").send_keys(typeText)
+		#同时转发评论
+		sendComments = random.randint(0,1)
+		if sendComments == 1:
+			self.driver.find_element_by_id("textLocation").click()
+		#添加转发图片
+		self.driver.find_element_by_id("buttonCam").click()
+		self.driver.find_element_by_id("albumPreview").click()
+		self.driver.find_element_by_id("send_ok").click()
+		#验证
+		time.sleep(20)
+		self.backToHome()
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(1)
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(3)
+		content = self.driver.find_element_by_id("index_item_weibo_content").get_attribute("text")
+		self.assertIn(typeText,content)
+		self.assertIn("http://",content)
+
+
+	def test_025_draft_comments(self):
+		typeText = "I have edited the draft."
+		# time.sleep(2)
+		while True:
+			try:
+				self.driver.find_element_by_id("index_item_actions").click()
+				break
+			except:
+				TouchAction(self.driver).press(x=500,y=800).move_to(x=0,y=-100).wait(1000).release().perform()
+				time.sleep(3)
+		self.driver.find_element_by_id("index_item_comment").click()
+		self.driver.find_element_by_id("compose_view_wrap").send_keys("Settings.test_025_draft_comments")
+		self.driver.find_element_by_id("edit_cancel").click()
+		time.sleep(1)
+		self.driver.find_element_by_id("ed_btn_positive").click()
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Drafts").click()
+		self.driver.find_element_by_id("draft_content").click()
+		self.driver.find_element_by_name("Edit").click()#edit
+		self.driver.find_element_by_id("editText").send_keys(typeText)
+		#同时转发评论
+		forwardComments = random.randint(0,1)
+		if forwardComments == 1:
+			self.driver.find_element_by_id("textLocation").click()
+		#添加转发图片
+		self.driver.find_element_by_id("buttonCam").click()
+		self.driver.find_element_by_id("albumPreview").click()
+		self.driver.find_element_by_id("send_ok").click()
+		#验证
+		time.sleep(20)
+		self.backToHome()
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(1)
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		time.sleep(3)
+		content = self.driver.find_element_by_id("index_item_weibo_content").get_attribute("text")
+		self.assertIn(typeText,content)
+		self.assertIn("http://",content)
+
+	def test_063_display_showUsername(self):
+		# self.driver.find_element_by_id("tab_icons_home_layout").click()
+		title1 = self.driver.find_element_by_id("index_title_group").get_attribute("text")
+		self.driver.find_element_by_id("tab_icons_prof_layout").click()
+		self.driver.find_element_by_id("button_icon_setting").click()
+		self.driver.find_element_by_name("Display").click()
+		for i in range(3):
+			try:
+				self.driver.find_element_by_id("show_username").click()
+				break
+			except:
+				TouchAction(self.driver).press(x=540,y=1200).move_to(x=0,y=-45).release().perform()
+			if i == 2:
+				self.skipTest("Cannot focus to show username checkbox.")
+
+		self.driver.find_element_by_id("back").click()
+		self.driver.find_element_by_id("backImageView").click()
+		self.driver.find_element_by_id("tab_icons_home_layout").click()
+		title2 = self.driver.find_element_by_id("index_title_group").get_attribute("text")
+		self.assertNotEqual(title1,title2)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(Home)
